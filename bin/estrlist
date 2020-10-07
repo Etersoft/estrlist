@@ -60,6 +60,18 @@ union()
          strip_spaces $(list $@ | sort -u)
 }
 
+intersection()
+{
+        local RES=""
+        local i j
+        for i in $2 ; do
+            for j in $1 ; do
+                [ "$i" = "$j" ] && RES="$RES $i"
+            done
+        done
+        strip_spaces "$RES"
+}
+
 uniq()
 {
         union $@
@@ -180,6 +192,7 @@ help()
         echo "  match <PATTERN> string            - check the string for a match to the regular expression given in PATTERN (egrep notation)"
         echo "  isempty [string]                  - true if string has no any symbols (only zero or more spaces)"
         echo "  union [word list]                 - sort and remove duplicates"
+        echo "  intersection <list1> <list2>      - print only intersected items (the same in both lists)"
         echo "  uniq [word list]                  - alias for union"
         echo "  list [word list]                  - just list words line by line"
         echo "  count [word list]                 - print word count"
