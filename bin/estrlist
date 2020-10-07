@@ -150,6 +150,29 @@ reg_wordexclude()
         strip_spaces "$RES"
 }
 
+if_contain()
+{
+        local i
+        for i in $2 ; do
+            [ "$i" = "$1" ] && return
+        done
+        return 1
+}
+
+difference()
+{
+        local RES=""
+        local i
+        for i in $1 ; do
+            if_contain $i "$2" || RES="$RES $i"
+        done
+        for i in $2 ; do
+            if_contain $i "$1" || RES="$RES $i"
+        done
+        strip_spaces "$RES"
+}
+
+
 # FIXME:
 # reg_include "1." "11 12 21 22" -> "11 12"
 reg_include()
@@ -193,6 +216,7 @@ help()
         echo "  isempty [string]                  - true if string has no any symbols (only zero or more spaces)"
         echo "  union [word list]                 - sort and remove duplicates"
         echo "  intersection <list1> <list2>      - print only intersected items (the same in both lists)"
+        echo "  difference <list1> <list2>        - symmetric difference between lists items (not in both lists)"
         echo "  uniq [word list]                  - alias for union"
         echo "  list [word list]                  - just list words line by line"
         echo "  count [word list]                 - print word count"
