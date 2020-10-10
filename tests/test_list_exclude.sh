@@ -26,7 +26,7 @@ check 1 "field3 field4" do_exclude_list "$LIST1" "$LIST2"
 #check 1.1 "field3 field4" "estrlist wordexclude" "$LIST1" "$LIST2"
 check 2 "" do_exclude_list "$LIST2" "$LIST1"
 check 2.1 "$LIST2" do_exclude_list "fiel.*" "$LIST2"
-check 3 "" do_exclude_list "$LIST1" "$LIST3"
+check 3 "field" do_exclude_list "$LIST1" "$LIST3"
 check 3.1 "field3 field4" do_exclude_list "$LIST1" "$LIST2"
 #check 3.1 "field" "estrlist wordexclude" "$LIST1" "$LIST3"
 check 4 "field-2 field4" do_exclude_list "field.1 field3" "$LIST2"
@@ -34,6 +34,8 @@ check 4 "field-2 field4" do_exclude_list "field.1 field3" "$LIST2"
 check 5 "$LIST2" do_exclude_list "fiel" "$LIST2"
 check 6 "$LIST2" do_exclude_list "" "$LIST2"
 check 7 "$LIST1" do_exclude_list "$LIST3" "$LIST1"
+check 8 "lyx ly ly" do_exclude_list "lyx-tex" "lyx lyx-tex ly ly"
+check 8.1 "lyx ly ly" do_exclude_list "lyx.tex" "lyx lyx.tex ly ly"
 
 echo
 check "reg 1" "field.1 field-2" regexp_exclude_list "field3 field[24]" "$LIST2"
@@ -44,7 +46,9 @@ check "reg 4.1" "$LIST1" regexp_exclude_list "fiel" "$LIST1"
 check "reg 5" "$LIST1" regexp_exclude_list "el" "$LIST1"
 check "reg 6" "list" regexp_exclude_list "fi.*" "$LIST1 list $LIST1"
 check "reg 7" "list" regexp_exclude_list ".*el.*" "$LIST1 list $LIST1"
+check "reg 8" "lyx ly ly" regexp_exclude_list "lyx-.*" "lyx lyx-tex ly ly"
 
+echo
 check "intersection 1" "$LIST1" "estrlist intersection" "$LIST1" "$LIST2"
 check "intersection 2" "8 4" "estrlist intersection" "1 4 3 5 8 7" "9 8 6 4 2"
 
