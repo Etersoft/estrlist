@@ -66,6 +66,9 @@ check "remove 4" "$LIST2" "estrlist reg_remove" "fiel" "$LIST2"
 #check "remove 5" "field4" "`remove_from_list "field2 field[13]" "$LIST2"`"
 check "remove 6" "$LIST2" "estrlist reg_remove" "" "$LIST2"
 
+check "reg_exclude" "coreutils gawk grep sed which" "estrlist reg_exclude" '.*\.so\..* .*/.* .*(.*' '/bin/sh coreutils gawk grep sed which'
+
+
 echo
 check "strip1" "test" strip_spaces " test "
 check "strip2" "test" strip_spaces "test "
