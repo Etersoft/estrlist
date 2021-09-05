@@ -56,15 +56,15 @@ check "difference 1" "1 1 3 7 9 6 2" "estrlist difference" "1 4 5 1 3 5 8 7" "9 
 
 # FIXME: нужно это?
 echo
-check "remove 1" "field.1" "estrlist reg_remove" "field-2" "$LIST1"
-check "remove 1.1" "$LIST1" "estrlist reg_remove" "field2" "$LIST1"
+check "remove 1" "field.1" "estrlist reg_exclude" "field-2" "$LIST1"
+check "remove 1.1" "$LIST1" "estrlist reg_exclude" "field2" "$LIST1"
 # FIXME: regexp??
-check "remove 2" "field.1 field-2" "estrlist reg_remove" "field." "$LIST2"
-check "remove 3" "field.1 field-2 list" "estrlist reg_remove" "field." "$LIST2 list"
-check "remove 3" "field-2 field4" "estrlist reg_remove" "field.*[13]" "$LIST2"
-check "remove 4" "$LIST2" "estrlist reg_remove" "fiel" "$LIST2"
+check "remove 2" "field.1 field-2" "estrlist reg_exclude" "field." "$LIST2"
+check "remove 3" "field.1 field-2 list" "estrlist reg_exclude" "field." "$LIST2 list"
+check "remove 3" "field-2 field4" "estrlist reg_exclude" "field.*[13]" "$LIST2"
+check "remove 4" "$LIST2" "estrlist reg_exclude" "fiel" "$LIST2"
 #check "remove 5" "field4" "`remove_from_list "field2 field[13]" "$LIST2"`"
-check "remove 6" "$LIST2" "estrlist reg_remove" "" "$LIST2"
+check "remove 6" "$LIST2" "estrlist reg_exclude" "" "$LIST2"
 
 check "reg_exclude" "coreutils gawk grep sed which" "estrlist reg_exclude" '.*\.so\..* .*/.* .*(.*' '/bin/sh coreutils gawk grep sed which'
 
