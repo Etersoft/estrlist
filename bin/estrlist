@@ -113,7 +113,7 @@ match()
 {
 	local wd="$1"
 	shift
-	echo "$*" | egrep -q -- "$wd"
+	echo "$*" | grep -E -q -- "$wd"
 }
 
 
