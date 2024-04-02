@@ -80,5 +80,59 @@ REQLIST='foomatic-db foomatic-db-engine nx rpm-build  fonts-bitmap-misc libasoun
 REALPKGNAMELIST="$(estrlist reg_exclude ".*\..* .*\.\..* .*/.* .*(.*" "$REQLIST")"
 check "rpmreqs" "foomatic-db foomatic-db-engine nx rpm-build fonts-bitmap-misc xkeyboard-config bc " echo "$REALPKGNAMELIST"
 
+echo
+EXLIST='desktop-file-utils fontconfig glibc-nss glibc-pthread libalsa libcairo libcups libfreetype libGL libgnutls30 libgtk+3 libICE libkrb5 libldap libopenal1 libpulseaudio libsane libssl libtxc_dxtn libudev1 libusb libva libvulkan1 libX11 libXcomposite libXcursor libXext libXi libXinerama libXpm libXrandr libXrender'
+estrlist exclude "$EXLIST" 'desktop-file-utils fontconfig glibc-nss glibc-pthread /lib64/ld-linux-x86-64.so.2 libalsa libasound.so.2()(64bit) libasound.so.2(64bit) libcairo libcups libfreetype libGL libgnutls30 libgphoto2_port.so.12()(64bit) libgphoto2_port.so.12(64bit) libgphoto2.so.6()(64bit) libgtk+3 libICE libkrb5 liblber-2.4.so.2()(64bit) libldap libldap-2.4.so.2()(64bit) libopenal1 libopenal.so.1()(64bit) libpcap.so.0.8()(64bit) libpulseaudio libpulse.so.0()(64bit) libpulse.so.0(64bit) libsane libsane.so.1()(64bit) libssl libtxc_dxtn libudev1 libudev.so.1()(64bit) libudev.so.1(64bit) libunwind.so.8()(64bit) libusb libusb-1.0.so.0()(64bit) libva libvulkan1 libX11 libX11.so.6()(64bit) libXcomposite libXcursor libXext libXext.so.6()(64bit) libXi libXinerama libXpm libXpm.so.4()(64bit) libXrandr libXrender'
+
+filter_multiple_provides()
+{
+        estrlist list - |
+        sed -e "s|/usr/bin/lpstat|cups|g
+                s|libldap_r-2.4.so.*|libldap|g
+                s|liblber-2.4.so.*|libldap|g
+                s|libudev.so.*|libudev1|g
+                s|/usr/bin/wineboot||g
+                s|/usr/bin/winetricks||g
+                s|/usr/bin/wine||g
+                s|/usr/bin/jconsole|java-1.7.0-openjdk-devel|g
+                s|/sbin/modprobe||g
+                s|gcc-c++|gcc9-c++|g
+                s|libltdl-devel|libltdl7-devel|g
+                s|liblua5-devel|liblua5.3-devel|g
+                s|clang-devel|clang10.0-devel|g
+                s|libXcomp.so.3.*|nx-libs|g
+                s|libwine.so.1.*||g"
+}
+
+echo
+echo 'libasound.so.2()(64bit) libasound.so.2.*(64bit) libgphoto2_port.so.12()(64bit) libgphoto2_port.so.12.*(64bit) libgphoto2.so.6()(64bit) liblber-2.4.so.2()(64bit) libldap-2.4.so.2()(64bit) libopenal.so.1()(64bit) libpcap.so.0.8()(64bit) libpulse.so.0()(64bit) libpulse.so.0.*(64bit) libsane.so.1()(64bit) libudev.so.1()(64bit) libudev.so.1.*(64bit) libunwind.so.8()(64bit) libusb-1.0.so.0()(64bit) libX11.so.6()(64bit) libXext.so.6()(64bit) libXpm.so.4()(64bit)' | filter_multiple_provides
+
 #REQCONVLIST="$(do_exclude_list "$REALPKGNAMELIST" "$REQLIST")"
 #check "convlist" "libasound.so.2 libcrypto.so.10 libX11.so.6 libXcomposite.so.1 libXdamage.so.1 libXfixes.so.3 libXmuu.so.1 libXpm.so.4 libXrandr.so.2 libXtst.so.6 libz.so.1 libdl.so.2" "$REQCONVLIST"
+
+checkw()
+{
+    ok="$1"
+    shift
+
+    if estrlist contains "$1" "$2" ; then
+        [ "OK" = "$ok" ]
+        res=$?
+    else
+        [ "OK" != "$ok" ]
+        res=$?
+    fi
+    [ "$res" = 0 ] && res="OK" || res="NOTOK"
+    echo "contains '$1' '$2' $res"
+}
+
+echo
+checkw NOTOK "lib12" "lib123 lib"
+checkw OK "lib123" "lib123 lib"
+checkw NOTOK "lib12" "lib1 lib"
+checkw OK "lib" "lib1 lib"
+checkw OK "lib1" "lib1 lib"
+checkw NOTOK "lib1" "lib2 lib"
+checkw NOTOK "lib" "lib1 lib2"
+checkw NOTOK "1 2" "1 2 3"
+checkw OK "lib123" "lib123"
